@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:study_planner/summary_cards.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -27,6 +28,24 @@ class _HomePageState extends State<HomePage> {
         'done': false,
         },
     ];
+
+int get totalHours {
+  int total = goals.fold(0, (sum, goal) {
+    return sum + (goal['hours'] as int);
+  });
+
+  return total;
+}
+int get completedGoals{
+   return goals.where((goal){
+    return goal['done'] == true;
+   }).length;
+}
+int get remainingGoals {
+    return goals.where((goal){
+        return goal['done'] == false;
+    }).length;
+}
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,8 +57,28 @@ class _HomePageState extends State<HomePage> {
       // // STATIC - Body
         body: Column(
         children: [
+            Row(
+                children: [
                     Expanded(
-        child: ListView.builder(
+                    child: SummaryCard(
+                        title: 'Total Hours',
+                        value: totalHours,
+                    ),
+                    ),
+                    Expanded(child: SummaryCard(title: "Completed Goals", value: completedGoals)),
+                    Expanded(child: SummaryCard(title: "Remaining Goals ", value: remainingGoals))
+                ],
+),
+                    Expanded(
+                child: goals.isEmpty? Center(
+                child: Text(
+                    'No study goals yet! Add a goal to get started.',
+                ),
+                )
+
+
+                :ListView.builder(
+
             itemCount: goals.length,
             itemBuilder: (context, index) {
             return Card(
