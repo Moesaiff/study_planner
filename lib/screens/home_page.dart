@@ -1,6 +1,8 @@
 
 import 'package:flutter/material.dart';
+import 'package:study_planner/screens/Second_screen.dart';
 import 'package:study_planner/summary_cards.dart';
+import 'package:study_planner/screens/home_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -104,7 +106,7 @@ int get remainingGoals {
                     subtitle: Text('${goals[index]['hours']} Hours'),
                     // LOGIC - Delete selected goal
                     trailing: IconButton(onPressed: () {setState(() {
-                      goals.removeAt(index);
+                        goals.removeAt(index);
                     });},icon: const Icon(Icons.delete)),
                 ),
             );
@@ -117,17 +119,15 @@ int get remainingGoals {
       // STATIC - FloatingActionButton
         floatingActionButton: FloatingActionButton(
             // LOGIC - Add a new sample goal
-        onPressed: () {setState(() {
-           goals.add({
-                'subject': 'Python',
-                'hours': 3,
-                'done': false,
+        onPressed: () async{
+            final newGoal = await Navigator.push(context, MaterialPageRoute(builder: (context) => SecondScreen()));
+            if (newGoal != null){setState(() {
+                goals.add(newGoal);
             });
-        });
-
+            }
         },
         child: const Icon(Icons.add),
         ),
     );
-  }
+    }
 }
